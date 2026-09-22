@@ -53,6 +53,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
+const params = new URLSearchParams(window.location.search);
+const DISPLAY_ID = params.get("display") || "unknown";
+
+console.log("=== DISPLAY IDENTIFICATION ===");
+console.log("Display ID:", DISPLAY_ID);
+console.log("URL:", window.location.href);
+
+
 /* =========================================================
    PAGE ELEMENTS
    ========================================================= */
