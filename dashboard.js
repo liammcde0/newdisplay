@@ -1071,6 +1071,19 @@ async function loadUsers() {
                 "click",
                 async () => {
 
+if (
+    userDocument.id ===
+    currentUser.id
+) {
+
+    showToast(
+        "You cannot delete the account you are currently using."
+    );
+
+    return;
+
+}
+                
                     const confirmed =
                         confirm(
                             `Delete ${user.name}?`
