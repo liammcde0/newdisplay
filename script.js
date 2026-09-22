@@ -1197,9 +1197,115 @@ console.log(
     "Trinity High School display started."
 );
 
-console.log("TEST 123");
+/* =========================================================
+   DISPLAY IDENTIFICATION
+   ========================================================= */
 
-const params = new URLSearchParams(window.location.search);
-const DISPLAY_ID = params.get("display") || "unknown";
+const params =
+    new URLSearchParams(window.location.search);
 
-console.log("Display ID:", DISPLAY_ID);
+const DISPLAY_ID =
+    params.get("display") || "unknown";
+
+
+console.log(
+    "Display ID:",
+    DISPLAY_ID
+);
+
+
+/* =========================================================
+   DISPLAY CONFIGURATION
+
+   Firestore:
+
+   displays
+       library-01
+
+   Example fields:
+
+   name: "Library"
+   location: "Library"
+   group: "library"
+   enabled: true
+   ========================================================= */
+
+let displayConfig = null;
+
+
+const displayConfigReference =
+    doc(
+        db,
+        "displays",
+        DISPLAY_ID
+    );
+
+
+onSnapshot(
+
+    displayConfigReference,
+
+    (snapshot) => {
+
+        setConnected();
+
+
+        if (!snapshot.exists()) {
+
+            console.warn(
+                `No display configuration found for "${DISPLAY_ID}".`
+            );
+
+            displayConfig = null;
+
+            return;
+        }
+
+
+        displayConfig =
+            snapshot.data();
+
+
+        console.log(
+            "=== DISPLAY CONFIGURATION ==="
+        );
+
+        console.log(
+            "ID:",
+            DISPLAY_ID
+        );
+
+        console.log(
+            "Name:",
+            displayConfig.name || "Unnamed Display"
+        );
+
+        console.log(
+            "Location:",
+            displayConfig.location || "Unknown"
+        );
+
+        console.log(
+            "Group:",
+            displayConfig.group || "None"
+        );
+
+        console.log(
+            "Enabled:",
+            displayConfig.enabled === true
+        );
+
+    },
+
+    (error) => {
+
+        console.error(
+            "Display configuration error:",
+            error
+        );
+
+        setDisconnected();
+
+    }
+
+);
