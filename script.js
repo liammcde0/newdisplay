@@ -14,11 +14,11 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import {
     getFirestore,
     doc,
-    onSnapshot
+    onSnapshot,
+    setDoc,
+    serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
-
 /* =========================================================
    FIREBASE CONFIGURATION
    ========================================================= */
