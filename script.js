@@ -144,6 +144,40 @@ function minutes(timeString) {
 }
 
 /* =========================================================
+   DISPLAY IDENTIFICATION
+   ========================================================= */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const DISPLAY_ID =
+    params.get("display") || "unknown";
+
+
+console.log(
+    "Display ID:",
+    DISPLAY_ID
+);
+
+
+/* =========================================================
+   DISPLAY CONFIGURATION
+
+   Firestore:
+
+   displays
+       library-01
+
+   Example fields:
+
+   name: "Library"
+   location: "Library"
+   group: "library"
+   enabled: true
+   ========================================================= */
+
+
+/* =========================================================
    DISPLAY HEARTBEAT
    ========================================================= */
 
@@ -1255,38 +1289,7 @@ console.log(
     "Trinity High School display started."
 );
 
-/* =========================================================
-   DISPLAY IDENTIFICATION
-   ========================================================= */
 
-const params =
-    new URLSearchParams(window.location.search);
-
-const DISPLAY_ID =
-    params.get("display") || "unknown";
-
-
-console.log(
-    "Display ID:",
-    DISPLAY_ID
-);
-
-
-/* =========================================================
-   DISPLAY CONFIGURATION
-
-   Firestore:
-
-   displays
-       library-01
-
-   Example fields:
-
-   name: "Library"
-   location: "Library"
-   group: "library"
-   enabled: true
-   ========================================================= */
 
 let displayConfig = null;
 
