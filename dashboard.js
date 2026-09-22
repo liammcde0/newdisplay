@@ -48,6 +48,78 @@ const app =
 const db =
     getFirestore(app);
 
+/* =========================================================
+   CURRENT USER
+   ========================================================= */
+
+const storedUser =
+    sessionStorage.getItem(
+        "trinityDisplayUser"
+    );
+
+
+if (!storedUser) {
+
+    window.location.replace(
+        "login.html"
+    );
+
+    throw new Error(
+        "No active login session."
+    );
+
+}
+
+
+const currentUser =
+    JSON.parse(storedUser);
+
+
+document.getElementById(
+    "signedInUser"
+).textContent =
+    `SIGNED ON: ${currentUser.name.toUpperCase()}`;
+
+
+/*
+Only administrators can see
+User Management.
+*/
+
+if (currentUser.role !== "admin") {
+
+    document
+        .querySelectorAll(".admin-only")
+        .forEach(element => {
+
+            element.classList.add(
+                "hidden"
+            );
+
+        });
+
+}
+
+
+/* SIGN OUT */
+
+document
+    .getElementById("signOutButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            sessionStorage.removeItem(
+                "trinityDisplayUser"
+            );
+
+            window.location.replace(
+                "login.html"
+            );
+
+        }
+    );
+
 
 /* =========================================================
    REFERENCES
