@@ -48,6 +48,13 @@ const app =
 const db =
     getFirestore(app);
 
+
+const params = new URLSearchParams(window.location.search);
+const DISPLAY_ID = params.get("display") || "unknown";
+
+console.log("This display is:", DISPLAY_ID);
+
+
 /* =========================================================
    CURRENT USER
    ========================================================= */
