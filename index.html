@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Prevent the kiosk from displaying an old cached version -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trinity High School Display</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         FULL-SCREEN TAKEOVER
+         Hidden during normal operation.
+
+         Firebase will be able to activate this instantly.
+         ===================================================== -->
+
+    <section id="takeoverScreen" class="takeover-screen hidden">
+
+        <img
+            src="school-logo.png"
+            alt="Trinity High School Logo"
+            class="takeover-logo"
+        >
+
+        <div class="takeover-content">
+
+            <div id="takeoverLabel" class="takeover-label">
+                SCHOOL ANNOUNCEMENT
+            </div>
+
+            <h1 id="takeoverTitle">
+                Announcement
+            </h1>
+
+            <h2 id="takeoverSubtitle"></h2>
+
+            <p id="takeoverMessage"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         NORMAL SCHOOL DISPLAY
+         ===================================================== -->
+
+    <div id="mainScreen" class="main-screen">
+
+
+        <!-- ================= HEADER ================= -->
+
+        <header class="school-header">
+
+            <div class="school-brand">
+
+                <img
+                    src="school-logo.png"
+                    alt="Trinity High School Logo"
+                    class="school-logo"
+                >
+
+                <div class="school-name">
+
+                    <h1>Trinity High School</h1>
+
+                    <p>Home • School • Church</p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Live Clock -->
+
+            <div class="clock-section">
+
+                <div id="time">
+                    --:--:--
+                </div>
+
+                <div id="day">
+                    LOADING
+                </div>
+
+                <div id="date">
+                    Loading date...
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <main class="display-content">
+
+
+            <!-- ==========================================
+                 CURRENT PERIOD
+                 ========================================== -->
+
+            <section class="period-card">
+
+                <div class="period-label">
+                    CURRENT PERIOD
+                </div>
+
+                <div id="periodName" class="period-name">
+                    Loading...
+                </div>
+
+                <div id="periodEnd" class="period-end">
+                    Loading...
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 ASSEMBLY INFORMATION
+
+                 Only displayed when relevant.
+                 ========================================== -->
+
+            <section
+                id="assemblyContainer"
+                class="assembly-banner hidden"
+            >
+
+                <div class="assembly-icon">
+                    ASSEMBLY
+                </div>
+
+                <div class="assembly-text">
+
+                    Assembly is for
+
+                    <strong id="assemblyYear">
+                        ---
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 ANNOUNCEMENT BANNER
+
+                 One announcement will be displayed at a
+                 time and automatically rotate.
+                 ========================================== -->
+
+            <section
+                id="announcementContainer"
+                class="announcement-card hidden"
+            >
+
+                <div class="announcement-heading">
+                    ANNOUNCEMENT
+                </div>
+
+                <div class="announcement-content">
+
+                    <h2 id="announcementTitle"></h2>
+
+                    <p id="announcementMessage"></p>
+
+                </div>
+
+                <!-- Small dots showing multiple announcements -->
+
+                <div
+                    id="announcementIndicators"
+                    class="announcement-indicators"
+                ></div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 SCHOOL NOTICES
+                 ========================================== -->
+
+            <section class="notices-card">
+
+                <div class="section-heading">
+
+                    <h2>School Notices</h2>
+
+                    <span
+                        id="noticeCount"
+                        class="notice-count"
+                    ></span>
+
+                </div>
+
+
+                <ul id="noticeList" class="notice-list">
+
+                    <!--
+                    JavaScript/Firebase will automatically
+                    insert notices here.
+                    -->
+
+                    <li class="loading-notice">
+                        Loading school notices...
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+        </main>
+
+
+        <!-- ================= FOOTER ================= -->
+
+        <footer class="display-footer">
+
+            <div>
+                Trinity High School
+            </div>
+
+            <div id="connectionStatus" class="connection-status">
+                Connecting...
+            </div>
+
+        </footer>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+
+         Firebase will be configured inside script.js.
+         ===================================================== -->
+
+    <script type="module" src="script.js"></script>
+
+</body>
+
+</html>
