@@ -143,6 +143,64 @@ function minutes(timeString) {
     return (hours * 60) + mins;
 }
 
+/* =========================================================
+   DISPLAY HEARTBEAT
+   ========================================================= */
+
+async function sendHeartbeat() {
+
+    if (DISPLAY_ID === "unknown") {
+        return;
+    }
+
+    try {
+
+        await setDoc(
+
+            doc(
+                db,
+                "displays",
+                DISPLAY_ID
+            ),
+
+            {
+                lastSeen: serverTimestamp()
+            },
+
+            {
+                merge: true
+            }
+
+        );
+
+        console.log(
+            "Heartbeat sent:",
+            DISPLAY_ID
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Heartbeat failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* Send immediately when display loads */
+
+sendHeartbeat();
+
+
+/* Then every 30 seconds */
+
+setInterval(
+    sendHeartbeat,
+    30000
+);
 
 /* =========================================================
    NORMAL SCHOOL PERIODS
