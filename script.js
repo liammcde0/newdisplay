@@ -1197,9 +1197,9 @@ console.log(
     "Trinity High School display started."
 );
 
+console.log("TEST 123");
+
 const params = new URLSearchParams(window.location.search);
 const DISPLAY_ID = params.get("display") || "unknown";
 
-console.log("=== DISPLAY IDENTIFICATION ===");
 console.log("Display ID:", DISPLAY_ID);
-console.log("URL:", window.location.href);
