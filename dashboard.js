@@ -52,7 +52,10 @@ const db =
 const params = new URLSearchParams(window.location.search);
 const DISPLAY_ID = params.get("display") || "unknown";
 
-console.log("This display is:", DISPLAY_ID);
+console.log("=== DISPLAY DEBUG ===");
+console.log("Full URL:", window.location.href);
+console.log("Query string:", window.location.search);
+console.log("Display ID:", DISPLAY_ID);
 
 
 /* =========================================================
