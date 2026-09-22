@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trinity Display Admin</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <img src="school-logo.png" alt="Trinity High School">
+        <div>
+            <h1>Trinity Display Admin</h1>
+            <p>Display Management Console</p>
+        </div>
+    </div>
+
+    <div class="user-area">
+        <strong id="signedInUser">ADMIN MODE</strong>
+        <span id="connectionStatus">Connecting...</span>
+    </div>
+
+</header>
+
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <button class="nav-button active" data-page="overview">
+            Overview
+        </button>
+
+        <button class="nav-button" data-page="notices">
+            School Notices
+        </button>
+
+        <button class="nav-button" data-page="announcements">
+            Announcements
+        </button>
+
+        <button class="nav-button" data-page="assembly">
+            Assembly
+        </button>
+
+        <button class="nav-button" data-page="takeover">
+            Screen Takeover
+        </button>
+
+        <button class="nav-button admin-only" data-page="users">
+            User Management
+        </button>
+
+        <div class="sidebar-bottom">
+
+            <a href="index.html" target="_blank">
+                Open Display
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="content">
+
+
+        <!-- OVERVIEW -->
+
+        <section id="page-overview" class="page active">
+
+            <div class="page-heading">
+                <h2>Overview</h2>
+                <p>Current status of the school display.</p>
+            </div>
+
+
+            <div class="status-grid">
+
+                <div class="status-card">
+                    <span>Display</span>
+                    <strong id="displayStatus">Checking...</strong>
+                </div>
+
+                <div class="status-card">
+                    <span>Notices</span>
+                    <strong id="noticeStatus">0</strong>
+                </div>
+
+                <div class="status-card">
+                    <span>Announcements</span>
+                    <strong id="announcementStatus">0</strong>
+                </div>
+
+                <div class="status-card">
+                    <span>Assembly</span>
+                    <strong id="assemblyStatus">Checking...</strong>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Quick Actions</h3>
+
+                <div class="quick-actions">
+
+                    <button
+                        class="primary"
+                        data-open-page="notices">
+                        Add Notice
+                    </button>
+
+                    <button
+                        class="primary"
+                        data-open-page="announcements">
+                        Add Announcement
+                    </button>
+
+                    <button
+                        class="danger"
+                        data-open-page="takeover">
+                        Screen Takeover
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTICES -->
+
+        <section id="page-notices" class="page">
+
+            <div class="page-heading">
+                <h2>School Notices</h2>
+                <p>Manage notices shown permanently on the display.</p>
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Add Notice</h3>
+
+                <div class="form-row">
+
+                    <input
+                        id="newNotice"
+                        type="text"
+                        placeholder="Enter notice text">
+
+                    <button
+                        id="addNotice"
+                        class="primary">
+                        Add Notice
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Current Notices</h3>
+
+                <div id="noticeManager">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ANNOUNCEMENTS -->
+
+        <section id="page-announcements" class="page">
+
+            <div class="page-heading">
+                <h2>Announcements</h2>
+                <p>Manage rotating announcements.</p>
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Add Announcement</h3>
+
+                <label>Title</label>
+
+                <input
+                    id="announcementTitle"
+                    type="text"
+                    placeholder="Example: School Photos">
+
+
+                <label>Message</label>
+
+                <textarea
+                    id="announcementMessage"
+                    placeholder="Enter announcement message"></textarea>
+
+
+                <button
+                    id="addAnnouncement"
+                    class="primary">
+                    Add Announcement
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Current Announcements</h3>
+
+                <div id="announcementManager">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ASSEMBLY -->
+
+        <section id="page-assembly" class="page">
+
+            <div class="page-heading">
+                <h2>Assembly</h2>
+                <p>Control the Tutor Time assembly banner.</p>
+            </div>
+
+
+            <div class="panel">
+
+                <label class="toggle-row">
+
+                    <input
+                        id="assemblyEnabled"
+                        type="checkbox">
+
+                    <span>Assembly Enabled</span>
+
+                </label>
+
+
+                <label>Year Group</label>
+
+                <select id="assemblyYear">
+
+                    <option value="">Select year group</option>
+
+                    <option value="S1">S1</option>
+                    <option value="S2">S2</option>
+                    <option value="S3">S3</option>
+                    <option value="S4">S4</option>
+                    <option value="S5">S5</option>
+                    <option value="S6">S6</option>
+
+                </select>
+
+
+                <button
+                    id="saveAssembly"
+                    class="primary">
+                    Save Assembly Settings
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- TAKEOVER -->
+
+        <section id="page-takeover" class="page">
+
+            <div class="page-heading">
+                <h2>Screen Takeover</h2>
+                <p>
+                    Replace the normal display with an urgent or important message.
+                </p>
+            </div>
+
+
+            <div id="takeoverWarning" class="warning hidden">
+                SCREEN TAKEOVER IS CURRENTLY ACTIVE
+            </div>
+
+
+            <div class="panel">
+
+                <label>Label</label>
+
+                <input
+                    id="takeoverLabel"
+                    type="text"
+                    value="SCHOOL ANNOUNCEMENT">
+
+
+                <label>Title</label>
+
+                <input
+                    id="takeoverTitle"
+                    type="text"
+                    placeholder="Example: S6 ASSEMBLY">
+
+
+                <label>Subtitle</label>
+
+                <input
+                    id="takeoverSubtitle"
+                    type="text"
+                    placeholder="Example: Main Hall">
+
+
+                <label>Message</label>
+
+                <textarea
+                    id="takeoverMessage"
+                    placeholder="Enter message"></textarea>
+
+
+                <div class="button-row">
+
+                    <button
+                        id="activateTakeover"
+                        class="danger">
+                        Take Over Screen
+                    </button>
+
+                    <button
+                        id="stopTakeover"
+                        class="secondary">
+                        Return to Normal Display
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- USERS -->
+
+        <section id="page-users" class="page">
+
+            <div class="page-heading">
+                <h2>User Management</h2>
+                <p>Create and manage display console accounts.</p>
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Create User</h3>
+
+                <div class="form-grid">
+
+                    <div>
+                        <label>Staff Name</label>
+                        <input
+                            id="newUserName"
+                            type="text"
+                            placeholder="John Smith">
+                    </div>
+
+                    <div>
+                        <label>Staff ID</label>
+                        <input
+                            id="newUserId"
+                            type="text"
+                            placeholder="1001">
+                    </div>
+
+                    <div>
+                        <label>Passcode</label>
+                        <input
+                            id="newUserPasscode"
+                            type="password"
+                            placeholder="Passcode">
+                    </div>
+
+                    <div>
+                        <label>Role</label>
+
+                        <select id="newUserRole">
+                            <option value="staff">Staff</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="createUser"
+                    class="primary">
+                    Create User
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h3>Users</h3>
+
+                <div id="userManager">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script
+    type="module"
+    src="dashboard.js">
+</script>
+
+</body>
+</html>
