@@ -976,6 +976,278 @@ document
         }
     );
 
+/* =========================================================
+   DISPLAY MANAGEMENT
+
+   Firestore:
+
+   displays/
+       library-01
+       sfl-01
+       mainhall-01
+       mainhall-02
+       s6common-01
+   ========================================================= */
+
+const displaysRef =
+    collection(db, "displays");
+
+
+onSnapshot(
+
+    displaysRef,
+
+    snapshot => {
+
+        connected();
+
+        const container =
+            document.getElementById(
+                "displayManager"
+            );
+
+        container.innerHTML = "";
+
+
+        /* ---------------------------------------------
+           COUNTERS
+           --------------------------------------------- */
+
+        let registeredCount = 0;
+        let enabledCount = 0;
+        let disabledCount = 0;
+
+        const locations =
+            new Set();
+
+
+        /* ---------------------------------------------
+           NO DISPLAYS
+           --------------------------------------------- */
+
+        if (snapshot.empty) {
+
+            container.textContent =
+                "No displays have been registered.";
+
+            updateDisplayCounters(
+                0,
+                0,
+                0,
+                0
+            );
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           BUILD DISPLAY LIST
+           --------------------------------------------- */
+
+        snapshot.forEach(
+            displayDocument => {
+
+                const display =
+                    displayDocument.data();
+
+                registeredCount++;
+
+
+                if (display.enabled === true) {
+
+                    enabledCount++;
+
+                } else {
+
+                    disabledCount++;
+
+                }
+
+
+                if (display.location) {
+
+                    locations.add(
+                        display.location
+                    );
+
+                }
+
+
+                /* DISPLAY CARD */
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "display-item";
+
+
+                /* STATUS */
+
+                const status =
+                    document.createElement(
+                        "div"
+                    );
+
+                status.className =
+                    display.enabled === true
+                        ? "display-status enabled"
+                        : "display-status disabled";
+
+
+                /* CONTENT */
+
+                const content =
+                    document.createElement(
+                        "div"
+                    );
+
+                content.className =
+                    "display-content";
+
+
+                const name =
+                    document.createElement(
+                        "strong"
+                    );
+
+                name.textContent =
+                    display.name ||
+                    displayDocument.id;
+
+
+                const location =
+                    document.createElement(
+                        "span"
+                    );
+
+                location.textContent =
+                    display.location ||
+                    "Unknown location";
+
+
+                const details =
+                    document.createElement(
+                        "small"
+                    );
+
+                details.textContent =
+                    `${displayDocument.id} • ${display.group || "No group"}`;
+
+
+                content.append(
+                    name,
+                    location,
+                    details
+                );
+
+
+                /* BADGE */
+
+                const badge =
+                    document.createElement(
+                        "div"
+                    );
+
+                badge.className =
+                    display.enabled === true
+                        ? "display-badge enabled"
+                        : "display-badge disabled";
+
+                badge.textContent =
+                    display.enabled === true
+                        ? "ENABLED"
+                        : "DISABLED";
+
+
+                /* ADD EVERYTHING */
+
+                item.append(
+                    status,
+                    content,
+                    badge
+                );
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+        /* ---------------------------------------------
+           UPDATE COUNTERS
+           --------------------------------------------- */
+
+        updateDisplayCounters(
+
+            registeredCount,
+            enabledCount,
+            disabledCount,
+            locations.size
+
+        );
+
+    },
+
+    error => {
+
+        console.error(
+            "Display manager error:",
+            error
+        );
+
+        document.getElementById(
+            "displayManager"
+        ).textContent =
+            "Unable to load displays.";
+
+    }
+
+);
+
+
+/* =========================================================
+   DISPLAY COUNTERS
+   ========================================================= */
+
+function updateDisplayCounters(
+    registered,
+    enabled,
+    disabled,
+    locations
+) {
+
+    document.getElementById(
+        "registeredDisplayCount"
+    ).textContent =
+        registered;
+
+
+    document.getElementById(
+        "enabledDisplayCount"
+    ).textContent =
+        enabled;
+
+
+    document.getElementById(
+        "disabledDisplayCount"
+    ).textContent =
+        disabled;
+
+
+    document.getElementById(
+        "displayLocationCount"
+    ).textContent =
+        locations;
+
+}
+
 
 /* =========================================================
    USER MANAGEMENT
