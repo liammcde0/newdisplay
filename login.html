@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trinity Display Admin - Sign In</title>
+
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <div class="login-page">
+
+        <div class="login-card">
+
+            <img
+                src="school-logo.png"
+                alt="Trinity High School"
+                class="logo"
+            >
+
+            <h1>Trinity Display Admin</h1>
+
+            <p class="subtitle">
+                Display Management Console
+            </p>
+
+            <div id="errorMessage" class="error hidden"></div>
+
+            <form id="loginForm">
+
+                <label for="staffId">
+                    Staff ID
+                </label>
+
+                <input
+                    id="staffId"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Enter your staff ID"
+                    required
+                >
+
+                <label for="passcode">
+                    Passcode
+                </label>
+
+                <input
+                    id="passcode"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Enter your passcode"
+                    required
+                >
+
+                <button
+                    id="loginButton"
+                    type="submit"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+            <div id="loginStatus" class="status">
+                Connected to Trinity Display System
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="login.js"></script>
+
+</body>
+
+</html>
