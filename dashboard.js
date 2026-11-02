@@ -1322,9 +1322,16 @@ onSnapshot(
 
 function renderDepartments() {
 
-    
     const select = document.getElementById("departmentSelect");
 
+    if (!select) {
+        console.error("Department select element not found.");
+        return;
+    }
+
+    const previousSelection = selectedDepartmentId;
+
+    // Populate department selector
     select.innerHTML = "";
 
     const placeholder = document.createElement("option");
@@ -1344,11 +1351,20 @@ function renderDepartments() {
 
     });
 
-    // Admins can select any department
+    // Admins can choose any department
     if (currentUser.role === "admin") {
 
-        select.disabled = false;
+        if (
+            departments.some(
+                department => department.id === previousSelection
+            )
+        ) {
+            selectedDepartmentId = previousSelection;
+        } else {
+            selectedDepartmentId = "";
+        }
 
+        select.disabled = false;
         select.value = selectedDepartmentId;
 
     } else {
@@ -1357,22 +1373,20 @@ function renderDepartments() {
         selectedDepartmentId = currentUser.department || "";
 
         select.value = selectedDepartmentId;
-
         select.disabled = true;
 
     }
 
-    // Populate the department dropdown used when creating users
+    // Populate department dropdown for creating users
     if (userDepartmentSelect) {
 
         userDepartmentSelect.innerHTML = "";
 
-        const departmentPlaceholder = document.createElement("option");
+        const userPlaceholder = document.createElement("option");
+        userPlaceholder.value = "";
+        userPlaceholder.textContent = "Select department";
 
-        departmentPlaceholder.value = "";
-        departmentPlaceholder.textContent = "Select department";
-
-        userDepartmentSelect.appendChild(departmentPlaceholder);
+        userDepartmentSelect.appendChild(userPlaceholder);
 
         departments.forEach(department => {
 
@@ -1385,30 +1399,6 @@ function renderDepartments() {
 
         });
 
-    }
-
-}
-
-       // Preserve the previous department selection if it exists
-    if (
-        departments.some(
-            department => department.id === previousSelection
-        )
-    ) {
-        selectedDepartmentId = previousSelection;
-    } else {
-        selectedDepartmentId = "";
-    }
-
-    // Admins can select any department
-    if (currentUser.role === "admin") {
-        select.disabled = false;
-        select.value = selectedDepartmentId;
-    } else {
-        // Staff are locked to their assigned department
-        selectedDepartmentId = currentUser.department || "";
-        select.value = selectedDepartmentId;
-        select.disabled = true;
     }
 
 }
