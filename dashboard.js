@@ -95,13 +95,34 @@ if (currentUser.role !== "admin") {
     document
         .querySelectorAll(".admin-only")
         .forEach(element => {
-
-            element.classList.add(
-                "hidden"
-            );
-
+            element.classList.add("hidden");
         });
 
+    /* Hide department creation from staff */
+
+    document
+        .querySelector("#page-departments h3")
+        ?.closest(".panel")
+        ?.classList.add("hidden");
+
+    /* Hide department selector from staff */
+
+    document
+        .getElementById("departmentSelect")
+        ?.closest(".panel")
+        ?.classList.add("hidden");
+
+    /* Hide the whole-school quick actions */
+
+    document
+        .querySelectorAll("[data-open-page]")
+        .forEach(button => {
+            button.classList.add("hidden");
+        });
+
+    /* Start staff on department notices */
+
+    openPage("departments");
 }
 
 
