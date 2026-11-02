@@ -1250,6 +1250,517 @@ function updateDisplayCounters(
 
 
 /* =========================================================
+   DEPARTMENT MANAGEMENT
+   Firestore collection: departments
+   Example document: departments/science
+   ========================================================= */
+
+const departmentsRef =
+    collection(db, "departments");
+
+let departments = [];
+
+let selectedDepartmentId = "";
+
+
+/* =========================================================
+   DEPARTMENT LISTENER
+   ========================================================= */
+
+onSnapshot(
+    departmentsRef,
+
+    snapshot => {
+
+        connected();
+
+        departments = snapshot.docs.map(
+            departmentDocument => ({
+                id: departmentDocument.id,
+                ...departmentDocument.data()
+            })
+        );
+
+        renderDepartments();
+
+        renderDepartmentNotices();
+
+    },
+
+    error => {
+
+        console.error(
+            "Department listener error:",
+            error
+        );
+
+        showToast(
+            "Unable to load departments."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   RENDER DEPARTMENT DROPDOWN
+   ========================================================= */
+
+function renderDepartments() {
+
+    const select =
+        document.getElementById(
+            "departmentSelect"
+        );
+
+    const previousSelection =
+        selectedDepartmentId;
+
+    select.innerHTML = "";
+
+    const placeholder =
+        document.createElement("option");
+
+    placeholder.value = "";
+    placeholder.textContent =
+        "Select a department";
+
+    select.appendChild(placeholder);
+
+
+    departments.forEach(department => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = department.id;
+
+        option.textContent =
+            department.name || department.id;
+
+        select.appendChild(option);
+
+    });
+
+
+    if (
+        departments.some(
+            department =>
+                department.id === previousSelection
+        )
+    ) {
+
+        select.value = previousSelection;
+
+    } else {
+
+        selectedDepartmentId = "";
+        select.value = "";
+
+    }
+
+}
+
+
+/* =========================================================
+   SELECT DEPARTMENT
+   ========================================================= */
+
+document
+    .getElementById("departmentSelect")
+    .addEventListener(
+        "change",
+        event => {
+
+            selectedDepartmentId =
+                event.target.value;
+
+            renderDepartmentNotices();
+
+        }
+    );
+
+
+/* =========================================================
+   CREATE DEPARTMENT
+   ========================================================= */
+
+document
+    .getElementById("createDepartment")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const nameInput =
+                document.getElementById(
+                    "newDepartmentName"
+                );
+
+            const name =
+                nameInput.value.trim();
+
+
+            if (!name) {
+
+                showToast(
+                    "Enter a department name."
+                );
+
+                return;
+
+            }
+
+
+            // Generate ID from department name.
+            const id =
+                name.toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-|-$/g, "");
+
+
+            if (!id) {
+
+                showToast(
+                    "Invalid department name."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                departments.some(
+                    department =>
+                        department.id === id
+                )
+            ) {
+
+                showToast(
+                    "Department already exists."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                await setDoc(
+                    doc(db, "departments", id),
+
+                    {
+                        name: name,
+                        notices: []
+                    }
+                );
+
+
+                nameInput.value = "";
+
+                selectedDepartmentId = id;
+
+                showToast(
+                    "Department created."
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    "Failed to create department."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   RENDER DEPARTMENT NOTICES
+   ========================================================= */
+
+function renderDepartmentNotices() {
+
+    const container =
+        document.getElementById(
+            "departmentNoticeManager"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!selectedDepartmentId) {
+
+        container.textContent =
+            "Select a department.";
+
+        return;
+
+    }
+
+
+    const department =
+        departments.find(
+            item =>
+                item.id === selectedDepartmentId
+        );
+
+
+    if (!department) {
+
+        container.textContent =
+            "Department not found.";
+
+        return;
+
+    }
+
+
+    const departmentNotices =
+        department.notices || [];
+
+
+    if (departmentNotices.length === 0) {
+
+        container.textContent =
+            "No notices for this department.";
+
+        return;
+
+    }
+
+
+    departmentNotices.forEach(
+        (notice, index) => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "manager-item";
+
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "manager-content";
+
+            content.textContent =
+                notice;
+
+
+            const remove =
+                document.createElement("button");
+
+            remove.className =
+                "delete-button";
+
+            remove.textContent =
+                "Remove";
+
+
+            remove.addEventListener(
+                "click",
+                () => removeDepartmentNotice(index)
+            );
+
+
+            item.append(
+                content,
+                remove
+            );
+
+
+            container.appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ADD DEPARTMENT NOTICE
+   ========================================================= */
+
+document
+    .getElementById("addDepartmentNotice")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (!selectedDepartmentId) {
+
+                showToast(
+                    "Select a department first."
+                );
+
+                return;
+
+            }
+
+
+            const input =
+                document.getElementById(
+                    "newDepartmentNotice"
+                );
+
+
+            const text =
+                input.value.trim();
+
+
+            if (!text) {
+
+                showToast(
+                    "Enter a notice."
+                );
+
+                return;
+
+            }
+
+
+            const department =
+                departments.find(
+                    item =>
+                        item.id === selectedDepartmentId
+                );
+
+
+            if (!department) {
+
+                showToast(
+                    "Department not found."
+                );
+
+                return;
+
+            }
+
+
+            const updatedNotices = [
+                ...(department.notices || []),
+                text
+            ];
+
+
+            try {
+
+                await setDoc(
+
+                    doc(
+                        db,
+                        "departments",
+                        selectedDepartmentId
+                    ),
+
+                    {
+                        notices: updatedNotices
+                    },
+
+                    {
+                        merge: true
+                    }
+
+                );
+
+
+                input.value = "";
+
+                showToast(
+                    "Department notice added."
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    "Failed to add department notice."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   REMOVE DEPARTMENT NOTICE
+   ========================================================= */
+
+async function removeDepartmentNotice(index) {
+
+    if (!selectedDepartmentId) {
+        return;
+    }
+
+
+    const department =
+        departments.find(
+            item =>
+                item.id === selectedDepartmentId
+        );
+
+
+    if (!department) {
+        return;
+    }
+
+
+    const updatedNotices =
+        (department.notices || []).filter(
+            (_, i) => i !== index
+        );
+
+
+    try {
+
+        await setDoc(
+
+            doc(
+                db,
+                "departments",
+                selectedDepartmentId
+            ),
+
+            {
+                notices: updatedNotices
+            },
+
+            {
+                merge: true
+            }
+
+        );
+
+
+        showToast(
+            "Department notice removed."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Failed to remove department notice."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    USER MANAGEMENT
 
    Firestore collection:
