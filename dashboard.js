@@ -185,6 +185,10 @@ const pages =
 
 function openPage(pageName) {
 
+    if (currentUser.role !== "admin") {
+    openPage("departments");
+}
+
     pages.forEach(page => {
 
         page.classList.remove("active");
