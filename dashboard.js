@@ -107,10 +107,7 @@ if (currentUser.role !== "admin") {
 
     /* Hide department selector from staff */
 
-    document
-        .getElementById("departmentSelect")
-        ?.closest(".panel")
-        ?.classList.add("hidden");
+   
 
     /* Hide the whole-school quick actions */
 
@@ -1325,40 +1322,71 @@ onSnapshot(
 
 function renderDepartments() {
 
-    const select =
-        document.getElementById(
-            "departmentSelect"
-        );
-
-    const previousSelection =
-        selectedDepartmentId;
+    const select = document.getElementById("departmentSelect");
 
     select.innerHTML = "";
 
-    const placeholder =
-        document.createElement("option");
-
+    const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent =
-        "Select a department";
+    placeholder.textContent = "Select a department";
 
     select.appendChild(placeholder);
 
-
     departments.forEach(department => {
 
-        const option =
-            document.createElement("option");
+        const option = document.createElement("option");
 
         option.value = department.id;
-
-        option.textContent =
-            department.name || department.id;
+        option.textContent = department.name || department.id;
 
         select.appendChild(option);
 
     });
 
+    // Admins can select any department
+    if (currentUser.role === "admin") {
+
+        select.disabled = false;
+
+        select.value = selectedDepartmentId;
+
+    } else {
+
+        // Staff are locked to their assigned department
+        selectedDepartmentId = currentUser.department || "";
+
+        select.value = selectedDepartmentId;
+
+        select.disabled = true;
+
+    }
+
+    // Populate the department dropdown used when creating users
+    if (userDepartmentSelect) {
+
+        userDepartmentSelect.innerHTML = "";
+
+        const departmentPlaceholder = document.createElement("option");
+
+        departmentPlaceholder.value = "";
+        departmentPlaceholder.textContent = "Select department";
+
+        userDepartmentSelect.appendChild(departmentPlaceholder);
+
+        departments.forEach(department => {
+
+            const option = document.createElement("option");
+
+            option.value = department.id;
+            option.textContent = department.name || department.id;
+
+            userDepartmentSelect.appendChild(option);
+
+        });
+
+    }
+
+}
 
     if (
         departments.some(
