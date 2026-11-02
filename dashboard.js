@@ -171,6 +171,7 @@ let notices = [];
 let announcements = [];
 
 
+
 /* =========================================================
    NAVIGATION
    ========================================================= */
@@ -184,71 +185,55 @@ const pages =
 
 function openPage(pageName) {
 
-    if (currentUser.role !== "admin") {
-    openPage("departments");
-}
-
     pages.forEach(page => {
-
         page.classList.remove("active");
-
     });
-
 
     navButtons.forEach(button => {
-
         button.classList.remove("active");
-
     });
-
 
     document
         .getElementById(`page-${pageName}`)
         ?.classList.add("active");
 
-
     document
-        .querySelector(
-            `[data-page="${pageName}"]`
-        )
+        .querySelector(`[data-page="${pageName}"]`)
         ?.classList.add("active");
-
 }
 
 
+// Navigation button clicks
 navButtons.forEach(button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+    button.addEventListener("click", () => {
 
-            openPage(
-                button.dataset.page
-            );
+        openPage(button.dataset.page);
 
-        }
-    );
+    });
 
 });
 
 
+// Dashboard quick-action buttons
 document
     .querySelectorAll("[data-open-page]")
     .forEach(button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+        button.addEventListener("click", () => {
 
-                openPage(
-                    button.dataset.openPage
-                );
+            openPage(button.dataset.openPage);
 
-            }
-        );
+        });
 
     });
 
+
+// Start department staff on their department page.
+// This must be AFTER openPage() is declared.
+if (currentUser.role !== "admin") {
+    openPage("departments");
+}
 
 /* =========================================================
    TOAST MESSAGE
@@ -1668,30 +1653,29 @@ function renderDepartmentNotices() {
    ADD DEPARTMENT NOTICE
    ========================================================= */
 
-if (
-    currentUser.role !== "admin" &&
-    selectedDepartmentId !== currentUser.department
-) {
-    showToast("You cannot modify another department.");
-    return;
-}
-
-
 document
     .getElementById("addDepartmentNotice")
     .addEventListener(
         "click",
         async () => {
 
-            if (!selectedDepartmentId) {
-
+            // Staff may only modify their assigned department
+            if (
+                currentUser.role !== "admin" &&
+                selectedDepartmentId !== currentUser.department
+            ) {
                 showToast(
-                    "Select a department first."
+                    "You cannot modify another department."
                 );
-
                 return;
-
             }
+
+            if (!selectedDepartmentId) {
+                showToast("Select a department first.");
+                return;
+            }
+
+            // Keep the rest of your existing handler here...
 
 
             const input =
