@@ -179,19 +179,11 @@ loginForm.addEventListener(
 
 
             const session = {
-
                 id: staffId,
-
-                name:
-                    user.name ||
-                    "Staff Member",
-
-                role:
-                    user.role ||
-                    "staff"
-
+                name: user.name || "Staff Member",
+                role: user.role || "staff",
+                department: user.department || ""
             };
-
 
             sessionStorage.setItem(
 
