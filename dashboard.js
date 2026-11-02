@@ -122,7 +122,6 @@ if (currentUser.role !== "admin") {
 
     /* Start staff on department notices */
 
-    openPage("departments");
 }
 
 
