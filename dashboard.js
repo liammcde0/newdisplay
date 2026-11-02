@@ -1,3 +1,4 @@
+console.log("TRINITY DASHBOARD JS UPDATED");
 import {
     initializeApp
 }
