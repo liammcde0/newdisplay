@@ -1688,20 +1688,13 @@ document
         async () => {
 
             // Staff may only modify their assigned department
-            if (
-                currentUser.role !== "admin" &&
-                selectedDepartmentId !== currentUser.department
-            ) {
-                showToast(
-                    "You cannot modify another department."
-                );
-                return;
-            }
-
-            if (!selectedDepartmentId) {
-                showToast("Select a department first.");
-                return;
-            }
+           if (
+            currentUser.role !== "admin" &&
+            selectedDepartmentId !== currentUser.department
+        ) {
+            showToast("You cannot modify another department.");
+            return;
+        }
 
             // Keep the rest of your existing handler here...
 
