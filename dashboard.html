@@ -84,6 +84,10 @@
             Displays
         </button>
 
+        <button class="nav-button" data-page="departments">
+            Department Notices
+        </button>
+
         <button class="nav-button admin-only" data-page="users">
             User Management
         </button>
@@ -434,6 +438,48 @@
     </div>
 
 </section>
+
+
+        <!-- DEPARTMENT NOTICES -->
+        <section id="page-departments" class="page">
+
+            <div class="page-heading">
+                <h2>Department Notices</h2>
+                <p>Manage notices that appear only on displays assigned to each department.</p>
+            </div>
+
+            <div class="panel">
+                <h3>Create Department</h3>
+                <div class="form-row">
+                    <input id="newDepartmentName" type="text" placeholder="Department name (e.g. Science)">
+                    <button id="createDepartment" class="primary">Create Department</button>
+                </div>
+                <p style="color:#666;font-size:0.9rem;">
+                    Department IDs are generated from the name. Existing departments, such as Science, will be retained.
+                </p>
+            </div>
+
+            <div class="panel">
+                <h3>Manage Department Notices</h3>
+
+                <label for="departmentSelect">Department</label>
+                <select id="departmentSelect">
+                    <option value="">Loading departments...</option>
+                </select>
+
+                <label for="newDepartmentNotice">New notice</label>
+                <div class="form-row">
+                    <input id="newDepartmentNotice" type="text" placeholder="Enter department notice">
+                    <button id="addDepartmentNotice" class="primary">Add Notice</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Current Department Notices</h3>
+                <div id="departmentNoticeManager">Select a department.</div>
+            </div>
+
+        </section>
 
         <!-- USERS -->
 
