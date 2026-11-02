@@ -1322,6 +1322,7 @@ onSnapshot(
 
 function renderDepartments() {
 
+    
     const select = document.getElementById("departmentSelect");
 
     select.innerHTML = "";
@@ -1388,66 +1389,29 @@ function renderDepartments() {
 
 }
 
+       // Preserve the previous department selection if it exists
     if (
         departments.some(
-            department =>
-                department.id === previousSelection
+            department => department.id === previousSelection
         )
     ) {
-
-        select.value = previousSelection;
-
+        selectedDepartmentId = previousSelection;
     } else {
-
         selectedDepartmentId = "";
-        select.value = "";
-
-        /* Department staff can only select their own department */
-
-if (currentUser.role !== "admin") {
-
-    selectedDepartmentId =
-        currentUser.department || "";
-
-    select.value =
-        selectedDepartmentId;
-
-    select.disabled = true;
-
-}
-
     }
 
-    /* Populate user creation department dropdown */
+    // Admins can select any department
+    if (currentUser.role === "admin") {
+        select.disabled = false;
+        select.value = selectedDepartmentId;
+    } else {
+        // Staff are locked to their assigned department
+        selectedDepartmentId = currentUser.department || "";
+        select.value = selectedDepartmentId;
+        select.disabled = true;
+    }
 
-userDepartmentSelect.innerHTML = "";
-
-const departmentPlaceholder =
-    document.createElement("option");
-
-departmentPlaceholder.value = "";
-departmentPlaceholder.textContent =
-    "Select department";
-
-userDepartmentSelect.appendChild(
-    departmentPlaceholder
-);
-
-departments.forEach(department => {
-
-    const option =
-        document.createElement("option");
-
-    option.value = department.id;
-
-    option.textContent =
-        department.name || department.id;
-
-    userDepartmentSelect.appendChild(option);
-
-});
-
-
+}
 
 
 /* =========================================================
