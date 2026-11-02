@@ -1261,6 +1261,9 @@ const departmentsRef =
 
 let departments = [];
 
+const userDepartmentSelect =
+    document.getElementById("newUserDepartment");
+
 let selectedDepartmentId = "";
 
 
@@ -1360,6 +1363,35 @@ function renderDepartments() {
         select.value = "";
 
     }
+
+    /* Populate user creation department dropdown */
+
+userDepartmentSelect.innerHTML = "";
+
+const departmentPlaceholder =
+    document.createElement("option");
+
+departmentPlaceholder.value = "";
+departmentPlaceholder.textContent =
+    "Select department";
+
+userDepartmentSelect.appendChild(
+    departmentPlaceholder
+);
+
+departments.forEach(department => {
+
+    const option =
+        document.createElement("option");
+
+    option.value = department.id;
+
+    option.textContent =
+        department.name || department.id;
+
+    userDepartmentSelect.appendChild(option);
+
+});
 
 }
 
