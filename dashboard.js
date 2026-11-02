@@ -1285,7 +1285,10 @@ let departments = [];
 const userDepartmentSelect =
     document.getElementById("newUserDepartment");
 
-let selectedDepartmentId = "";
+let selectedDepartmentId =
+    currentUser.role === "admin"
+        ? ""
+        : currentUser.department || "";
 
 
 /* =========================================================
@@ -1383,6 +1386,20 @@ function renderDepartments() {
         selectedDepartmentId = "";
         select.value = "";
 
+        /* Department staff can only select their own department */
+
+if (currentUser.role !== "admin") {
+
+    selectedDepartmentId =
+        currentUser.department || "";
+
+    select.value =
+        selectedDepartmentId;
+
+    select.disabled = true;
+
+}
+
     }
 
     /* Populate user creation department dropdown */
@@ -1423,18 +1440,18 @@ departments.forEach(department => {
 
 document
     .getElementById("departmentSelect")
-    .addEventListener(
-        "change",
-        event => {
+    .addEventListener("change", event => {
 
-            selectedDepartmentId =
-                event.target.value;
-
-            renderDepartmentNotices();
-
+        if (currentUser.role !== "admin") {
+            return;
         }
-    );
 
+        selectedDepartmentId =
+            event.target.value;
+
+        renderDepartmentNotices();
+
+    });
 
 /* =========================================================
    CREATE DEPARTMENT
@@ -1445,7 +1462,10 @@ document
     .addEventListener(
         "click",
         async () => {
-
+    if (currentUser.role !== "admin") {
+    showToast("You do not have permission.");
+    return;
+}
             const nameInput =
                 document.getElementById(
                     "newDepartmentName"
@@ -1645,6 +1665,15 @@ function renderDepartmentNotices() {
    ADD DEPARTMENT NOTICE
    ========================================================= */
 
+if (
+    currentUser.role !== "admin" &&
+    selectedDepartmentId !== currentUser.department
+) {
+    showToast("You cannot modify another department.");
+    return;
+}
+
+
 document
     .getElementById("addDepartmentNotice")
     .addEventListener(
@@ -1753,6 +1782,14 @@ document
    ========================================================= */
 
 async function removeDepartmentNotice(index) {
+
+    if (
+    currentUser.role !== "admin" &&
+    selectedDepartmentId !== currentUser.department
+) {
+    showToast("You cannot modify another department.");
+    return;
+}
 
     if (!selectedDepartmentId) {
         return;
@@ -2019,21 +2056,28 @@ document
                     "newUserRole"
                 ).value;
 
+            const department =
+                    role === "staff"
+                    ? document.getElementById(
+                    "newUserDepartment"
+                    ).value
+                    : "";
+
 
             if (
-                !name ||
-                !staffId ||
-                !passcode
-            ) {
+    !name ||
+    !staffId ||
+    !passcode ||
+    (role === "staff" && !department)
+) {
 
-                showToast(
-                    "Complete all user fields."
-                );
+    showToast(
+        "Complete all user fields and select a department."
+    );
 
-                return;
+    return;
 
-            }
-
+}
 
             await setDoc(
 
@@ -2044,11 +2088,12 @@ document
                 ),
 
                 {
-                    name,
-                    passcode,
-                    role,
-                    enabled: true
-                }
+    name,
+    passcode,
+    role,
+    department,
+    enabled: true
+}
 
             );
 
