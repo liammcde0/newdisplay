@@ -1267,13 +1267,14 @@ let selectedDepartmentId = "";
    DEPARTMENT LISTENER
    ========================================================= */
 
+console.log("Department listener starting");
 onSnapshot(
     departmentsRef,
 
     snapshot => {
 
         connected();
-
+        console.log("Department snapshot received");
         departments = snapshot.docs.map(
             departmentDocument => ({
                 id: departmentDocument.id,
