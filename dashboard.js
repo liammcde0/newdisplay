@@ -1550,11 +1550,16 @@ function renderDepartmentNotices() {
     }
 
 
-    const department =
-        departments.find(
-            item =>
-                item.id === selectedDepartmentId
-        );
+    console.log("Current user:", currentUser);
+console.log("Selected department ID:", selectedDepartmentId);
+console.log("Department list:", departments.map(d => ({
+    id: d.id,
+    name: d.name
+})));
+
+const department = departments.find(
+    item => item.id === selectedDepartmentId
+);
 
 
     if (!department) {
